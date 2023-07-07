@@ -14,3 +14,9 @@
 .plot--visible {
   visibility: visible;
 }
+
+.plot--purchaseable {
+  --ac-button-primary-bg: #d2b100;
+  --ac-button-primary-hover-bg: #e8c506;
+  --ac-button-primary-active-bg: #ffd600;
+}
