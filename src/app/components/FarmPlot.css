@@ -1,0 +1,16 @@
+.farm-button-grid {
+  flex: 0 1 auto;
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  gap: 1px;
+
+  border: 1px solid red;
+}
+
+.plot {
+  visibility: hidden;
+}
+
+.plot--visible {
+  visibility: visible;
+}
