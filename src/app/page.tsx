@@ -4,14 +4,6 @@ import { Button } from "@navikt/ds-react"
 import { FarmPlot } from "./components/FarmPlot"
 import React, { createContext } from "react"
 import { WateringCanFillIcon } from "@navikt/aksel-icons"
-import pino from "pino"
-
-export const log = pino({ level: "debug" })
-
-log.debug("debugtest!")
-log.info("test")
-log.warn("test")
-log.error("test")
 
 export default function Home() {
   return (
