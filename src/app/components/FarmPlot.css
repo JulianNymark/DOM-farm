@@ -4,23 +4,25 @@
   grid-template-columns: repeat(21, 1fr);
   gap: 1px;
 
-  border: 1px solid red;
+  border: 1px solid black;
+  border-radius: var(--a-radius-lg);
 }
 
 .plot {
   visibility: hidden;
   width: 50px;
   height: 50px;
+  flex-flow: column nowrap;
 }
 
 .plot--purchaseable .icon {
   font-size: 1em;
-  transform: translate(4px, 0);
+  transform: translate(0, 7px);
 }
 
 .plot--purchaseable .navds-label {
   font-size: 0.8em;
-  transform: translate(-3px, 0);
+  transform: translate(0, -7px);
 }
 
 .plot--visible {
