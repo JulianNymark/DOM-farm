@@ -1,57 +1,44 @@
 "use client"
 
-import { BankNoteIcon, PlantIcon } from "@navikt/aksel-icons"
+import { BankNoteIcon, KronerIcon, PlantIcon } from "@navikt/aksel-icons"
 import { Button } from "@navikt/ds-react"
 import React, { useState } from "react"
 import "./FarmPlot.css"
 import cl from "classnames"
 import { log } from "../utils/Logger"
-import { getAdjacentPlots, omitIncludes } from "../utils/PlotUtils"
+import {
+  PlotInfo,
+  getAdjacentPlots,
+  initialActivePlots,
+  omitIncludes,
+} from "../utils/Plot"
+import { buyPlot, getPlotPrice } from "../utils/Financial"
 
-const dimLength = 21 // odd numbers
-const activeLength = 3 // odd numbers
-const Plots: number[] = [...Array(dimLength * dimLength).keys()]
-let InitialActivePlots: number[] = []
-
-export type PlotInfo = {
-  idx: number
-  type: "active" | "purchaseable" | "inactive"
-}
+const totalDimLength = 21 // odd numbers
+const initialActiveDimLength = 3 // odd numbers
+const Plots: number[] = [...Array(totalDimLength * totalDimLength).keys()]
 
 export type States = {
-  setPurchaseablePlots: React.Dispatch<React.SetStateAction<number[]>>,
-  setActivePlots: React.Dispatch<React.SetStateAction<number[]>>,
+  setPurchaseablePlots: React.Dispatch<React.SetStateAction<number[]>>
+  setActivePlots: React.Dispatch<React.SetStateAction<number[]>>
   purchaseablePlots: number[]
   activePlots: number[]
+  wallet: number
+  setWallet: React.Dispatch<React.SetStateAction<number>>
 }
 
-for (let rowIdx of [...Array(activeLength).keys()]) {
-  const activeRow = [...Array(activeLength).keys()].map(
-    (e) =>
-      e +
-      Math.floor((dimLength * dimLength) / 2) +
-      dimLength * rowIdx -
-      Math.floor(activeLength / 2) * dimLength -
-      Math.floor(activeLength / 2)
-  )
-  InitialActivePlots = InitialActivePlots.concat(activeRow)
-}
-
-const handlePlotClick = (
-  plot: PlotInfo,
-  states: States,
-) => {
+const handlePlotClick = (plot: PlotInfo, states: States) => {
   log.debug(JSON.stringify({ plot }, null, 2))
 
   switch (plot.type) {
     case "active":
-      const adjacentPlots = getAdjacentPlots(plot.idx, dimLength)
+      const adjacentPlots = getAdjacentPlots(plot.idx, totalDimLength)
       const purchaseable = omitIncludes(adjacentPlots, states.activePlots)
       states.setPurchaseablePlots(purchaseable)
       break
     case "purchaseable":
-      states.setActivePlots([...states.activePlots, plot.idx])
-      states.setPurchaseablePlots([])
+      log.debug(`price: ${getPlotPrice(plot.idx, totalDimLength)}`)
+      buyPlot(plot.idx, states)
       break
     case "inactive":
       break
@@ -60,12 +47,18 @@ const handlePlotClick = (
 
 export const FarmPlot = () => {
   const [purchaseablePlots, setPurchaseablePlots] = useState<number[]>([])
-  const [activePlots, setActivePlots] = useState<number[]>(InitialActivePlots)
+  const [activePlots, setActivePlots] = useState<number[]>(
+    initialActivePlots(initialActiveDimLength, totalDimLength)
+  )
+  const [wallet, setWallet] = useState<number>(10)
+
   const states: States = {
     purchaseablePlots,
     setPurchaseablePlots,
     activePlots,
     setActivePlots,
+    wallet,
+    setWallet,
   }
 
   return (
@@ -81,6 +74,8 @@ export const FarmPlot = () => {
           if (isPurchaseable) {
             plot.type = "purchaseable"
           }
+          const plotPrice = getPlotPrice(idx, totalDimLength)
+
           return (
             <div key={idx}>
               <Button
@@ -93,12 +88,12 @@ export const FarmPlot = () => {
                 }}
                 icon={
                   isPurchaseable && !isActive ? (
-                    <BankNoteIcon aria-hidden />
+                    <KronerIcon className="icon" aria-hidden />
                   ) : (
-                    <PlantIcon aria-hidden />
+                    <PlantIcon className="icon" aria-hidden />
                   )
                 }
-              ></Button>
+              >{isPurchaseable ? plotPrice : ''}</Button>
             </div>
           )
         })}

@@ -1,5 +1,10 @@
 import { log } from "./Logger"
 
+export type PlotInfo = {
+  idx: number
+  type: "active" | "purchaseable" | "inactive"
+}
+
 export const getAdjacentPlots = (idx: number, dimLength: number): number[] => {
   const initialAdjacents = [
     [-dimLength - 1, -dimLength, -dimLength + 1],
@@ -37,4 +42,21 @@ export const getAdjacentPlots = (idx: number, dimLength: number): number[] => {
 
 export const omitIncludes = (initial: number[], other: number[]) => {
   return initial.filter((e) => !other.includes(e))
+}
+
+export const initialActivePlots = (initialActiveLength: number, dimLength: number): number[] => {
+  let InitialActivePlots: number[] = []
+  for (let rowIdx of [...Array(initialActiveLength).keys()]) {
+    const activeRow = [...Array(initialActiveLength).keys()].map(
+      (e) =>
+        e +
+        Math.floor((dimLength * dimLength) / 2) +
+        dimLength * rowIdx -
+        Math.floor(initialActiveLength / 2) * dimLength -
+        Math.floor(initialActiveLength / 2)
+    )
+    InitialActivePlots = InitialActivePlots.concat(activeRow)
+  }
+
+  return InitialActivePlots
 }

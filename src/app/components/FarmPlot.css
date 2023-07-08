@@ -9,6 +9,18 @@
 
 .plot {
   visibility: hidden;
+  width: 50px;
+  height: 50px;
+}
+
+.plot--purchaseable .icon {
+  font-size: 1em;
+  transform: translate(4px, 0);
+}
+
+.plot--purchaseable .navds-label {
+  font-size: 0.8em;
+  transform: translate(-3px, 0);
 }
 
 .plot--visible {
