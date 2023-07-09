@@ -88,6 +88,9 @@ export const FarmPlot = ({ gameState }: { gameState: GameState }) => {
         setPurchaseablePlots([])
         break
       case "plantSelect":
+        gameState.setModalMessage("pick a plant")
+        gameState.setModalOpen(true)
+        gameState.setMode('normal')
         break
     }
   }, [gameState])
