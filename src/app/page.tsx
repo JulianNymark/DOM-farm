@@ -95,6 +95,7 @@ export default function Home() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(!modalOpen)}
+        closeButton={false}
       >
         <Modal.Content>
               <BodyLong>

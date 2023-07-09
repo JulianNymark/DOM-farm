@@ -1,3 +1,4 @@
 .buy-button--active {
   --ac-button-primary-bg: #009900;
+  --ac-button-primary-hover-bg: #008500;
 }

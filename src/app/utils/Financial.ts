@@ -48,6 +48,6 @@ export const getPlotPrice = (idx: number, totalDimLength: number): number => {
   )
 
   return Math.floor(
-    (ringDistanceFromCenter * difficulityCoefficient) ** difficulityPower
+    (ringDistanceFromCenter) ** difficulityPower
   )
 }

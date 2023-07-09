@@ -34,7 +34,11 @@ export type FarmState = {
   wallet: number
 }
 
-const handlePlotClick = (plot: PlotInfo, states: FarmState, gameState: GameState) => {
+const handlePlotClick = (
+  plot: PlotInfo,
+  states: FarmState,
+  gameState: GameState
+) => {
   log.debug(JSON.stringify({ plot }, null, 2))
 
   switch (plot.type) {
@@ -65,16 +69,26 @@ export const FarmPlot = ({ gameState }: { gameState: GameState }) => {
   }
 
   useEffect(() => {
-    if (gameState.mode === "buySelect") {
-      let plots = new Set<number>()
-      for (let activePlot of activePlots) {
-        const adjacentPlots = getAdjacentPlots(activePlot, totalDimLength)
-        const adjacentPurchaseablePlots = omitIncludes(adjacentPlots, activePlots)
-        for (let p of adjacentPurchaseablePlots) {
-          plots.add(p)
+    switch (gameState.mode) {
+      case "buySelect":
+        let plots = new Set<number>()
+        for (let activePlot of activePlots) {
+          const adjacentPlots = getAdjacentPlots(activePlot, totalDimLength)
+          const adjacentPurchaseablePlots = omitIncludes(
+            adjacentPlots,
+            activePlots
+          )
+          for (let p of adjacentPurchaseablePlots) {
+            plots.add(p)
+          }
         }
-      }
-      setPurchaseablePlots([...plots])
+        setPurchaseablePlots([...plots])
+        break
+      case "normal":
+        setPurchaseablePlots([])
+        break
+      case "plantSelect":
+        break
     }
   }, [gameState])
 
